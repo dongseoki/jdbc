@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.NoSuchElementException;
 
 @Slf4j
 public class MemberRepositoryV0 {
@@ -63,4 +64,31 @@ public class MemberRepositoryV0 {
     return DBConnectionUtil.getConnection();
   }
 
+  public Member findById(String memberId) {
+    String sql = "select * from member where member_id = ?";
+
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+    ResultSet resultSet = null;
+
+    try {
+      connection = getConnection();
+      preparedStatement = connection.prepareStatement(sql);
+      preparedStatement.setString(1, memberId);
+      resultSet = preparedStatement.executeQuery();
+
+      if (resultSet.next()) {
+        Member member = new Member();
+        member.setMemberId(resultSet.getString("member_id"));
+        member.setMoney(resultSet.getInt("money"));
+        return member;
+      } else {
+        throw new NoSuchElementException("member not found member_id = " + memberId);
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    } finally {
+      close(connection, preparedStatement, resultSet);
+    }
+  }
 }
