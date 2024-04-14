@@ -91,4 +91,41 @@ public class MemberRepositoryV0 {
       close(connection, preparedStatement, resultSet);
     }
   }
+
+  public void update(int money, String memberId) {
+    String sql = "update member set money = ? where member_id = ?";
+
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+
+    try {
+      connection = getConnection();
+      preparedStatement = connection.prepareStatement(sql);
+      preparedStatement.setInt(1, money);
+      preparedStatement.setString(2, memberId);
+      preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    } finally {
+      close(connection, preparedStatement, null);
+    }
+  }
+
+  public void delete(String memberId) {
+    String sql = "delete from member where member_id = ?";
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+
+    try {
+      connection = getConnection();
+      preparedStatement = connection.prepareStatement(sql);
+      preparedStatement.setString(1, memberId);
+      preparedStatement.execute();
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    } finally {
+      close(connection, preparedStatement, null);
+    }
+  }
+
 }
