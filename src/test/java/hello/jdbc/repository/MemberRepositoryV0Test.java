@@ -1,5 +1,6 @@
 package hello.jdbc.repository;
 
+import com.zaxxer.hikari.HikariDataSource;
 import hello.jdbc.domain.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -7,6 +8,9 @@ import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
 import java.util.NoSuchElementException;
 
+import static hello.jdbc.connection.ConnectionConst.PASSWORD;
+import static hello.jdbc.connection.ConnectionConst.URL;
+import static hello.jdbc.connection.ConnectionConst.USERNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -36,5 +40,9 @@ class MemberRepositoryV0Test {
     assertThatThrownBy(() -> memberRepositoryV0.findById(memberV0.getMemberId()))
         .isInstanceOf(NoSuchElementException.class);
   }
+
+
+
+
 
 }
